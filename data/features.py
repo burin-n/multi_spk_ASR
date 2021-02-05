@@ -24,7 +24,7 @@ class Perturbation(object):
             ['vol', f'{vol:.5f}'],  
             ['rate', f'{sample_rate}'],  # preserve sampling rate after applying speed perturbation
         ]
-        sample['data'], sf = torchaudio.sox_effects.apply_effects_tensor(sample['data'], 
+        sample['audio'], sf = torchaudio.sox_effects.apply_effects_tensor(sample['audio'], 
                                 sample_rate, self.effects, channels_first=True)
         return sample
 
@@ -50,8 +50,8 @@ class WavFeaturizer(object):
         )
 
     def __call__(self, sample):
-        log_mel_specgram = torch.log(self.featurizer(sample['data']))
-        sample['data'] = log_mel_specgram[0] # default featurizer returns data in (nbatch, ...)
+        log_mel_specgram = torch.log(self.featurizer(sample['audio']))
+        sample['audio'] = log_mel_specgram[0] # default featurizer returns data in (nbatch, ...)
         return sample
 
 

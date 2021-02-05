@@ -39,7 +39,7 @@ class LibriSpeechMixDataset(Dataset):
         wav_path = os.path.join(self.root_dir,
                                 metadata["mixed_wav"])
         waveform, sample_rate = torchaudio.load(wav_path)
-        metadata['data'] = waveform
+        metadata['audio'] = waveform
         metadata['sample_rate'] = sample_rate
         
         if self.transform:
@@ -48,7 +48,7 @@ class LibriSpeechMixDataset(Dataset):
                     metadata = trans(metadata)
             else:
                 metadata = self.transform(metadata)
-        metadata['data_length'] = metadata['data'].shape[-1]
+        metadata['audio_length'] = metadata['audio'].shape[-1]
         metadata['labels_length'] = [len(lab) for lab in metadata['labels']]
         return metadata
 
@@ -74,4 +74,4 @@ if __name__ == '__main__':
             fetch = train_dataset[i]
     print('{:.5f} sec/sample'.format((time.time() - start)/EP/N))
     print(fetch)
-    print(torch.cat([fetch['data'], fetch['data']]).shape)
+    print(torch.cat([fetch['audio'], fetch['audio']]).shape)
